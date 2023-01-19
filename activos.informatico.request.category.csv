@@ -1,0 +1,5 @@
+id,name,description,type
+request_category_optimization,Optimización de equipos,Solicitud para atender requerimiento de optimización de equipos,optimization
+request_category_assigment,Asignación,Solicitud para asignar un equipos a un empleado nuevo,assigment
+request_category_refund,Devolución,Solicitud para receptar un equipo de un empleado saliente,refund
+request_category_decompose,Reciclar,Solicitud para dar de bajo el equipo y reciclarlo por piezas en buen estado mediante desarme,decompose

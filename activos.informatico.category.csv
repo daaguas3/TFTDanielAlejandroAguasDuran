@@ -1,0 +1,18 @@
+id,name,parent_id:id,sequence_id:id
+category_job_positions,Puestos de trabajo,,activos_informatico.sequence_job_positions_seq
+category_laptos,Laptops,category_job_positions,
+category_peripherals,Periféricos,,activos_informatico.sequence_peripherals_seq
+category_mouse,Mouse,category_peripherals,
+category_keyboard,Teclado Usb,category_peripherals,
+category_atriles,Atriles,category_peripherals,
+category_hand_save,Reposa muñeca,category_peripherals,
+category_spare_parts,Repuestos,,activos_informatico.sequence_spare_parts_seq
+category_part_memory,Memoria Ram,category_spare_parts,
+category_part_disc,Disco,category_spare_parts,
+category_part_display,Pantallas,category_spare_parts,
+category_part_fan,Ventilador,category_spare_parts,
+category_part_keyborad,Teclado,category_spare_parts,
+category_part_mainboard,Tarjeta Madre,category_spare_parts,
+category_part_batery,Baterias,category_spare_parts,
+category_part_chargers,Cargadores,category_spare_parts,
+category_part_touchpads,Mouse Tactil,category_spare_parts,
