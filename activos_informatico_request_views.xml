@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Tree view for "activos.informatico.request.category" -->
+    <record id="view_activos_informatico_request_category_tree" model="ir.ui.view">
+        <field name="name">view.activos.informatico.request.category.tree</field>
+        <field name="model">activos.informatico.request.category</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="activos.informatico.request.category_tree" editable="bottom">
+                <field name="name" />
+                <field name="description" />
+                <field name="type" />
+            </tree>
+        </field>
+    </record>
+    <!-- Search view for "activos.informatico.request.category" -->
+    <record id="view_activos_informatico_request_category_search" model="ir.ui.view">
+        <field name="name">view.activos.informatico.request.category.search</field>
+        <field name="model">activos.informatico.request.category</field>
+        <field name="arch" type="xml">
+            <search string="activos.informatico.request.category_search">
+                <field name="name" />
+                <field name="description" />
+                <field name="type" />
+                <separator/>
+                <filter name="archived" string="Archivados" domain="[('active', '=', False)]"/>
+                <separator/>
+                <group expand="1" string="Group By">
+                    <filter string="Tipo" name="type" context="{'group_by':'type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_activos_informatico_request_category" model="ir.actions.act_window">
+        <field name="name">Categorias de solicitudes</field>
+        <field name="res_model">activos.informatico.request.category</field>
+        <field name="view_id" ref="view_activos_informatico_request_category_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Agregar un categoria de soporte
+          </p>
+            <p>
+            Permite identificar los activos informaticos
+          </p>
+        </field>
+    </record>
+    <record id="view_activos_informatico_request_tree" model="ir.ui.view">
+        <field name="name">view.activos.informatico.request.tree</field>
+        <field name="model">activos.informatico.request</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="activos.informatico.request_tree" >
+                <field name="name" />
+                <field name="category_id" />
+                <field name="requester_employee_id" />
+                <field name="accountable_employee_id" />
+                <field name="stage" />
+                <field name="description" />
+            </tree>
+        </field>
+    </record>
+    <record id="view_activos_informatico_request_form" model="ir.ui.view">
+        <field name="name">view.activos.informatico.request.form</field>
+        <field name="model">activos.informatico.request</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Solicitudes" >
+                <header>
+                    <button string="En proceso"
+                        class="btn btn-primary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('new' ))]}"
+                        context = "{'new_stage':'process'}"
+                        />
+                    <button string="Terminado"
+                        class="btn btn-primary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('process' ))]}"
+                        context = "{'new_stage':'done'}"
+                        />
+                    <button string="Cancelado"
+                        class="btn btn-secondary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('new','process'))]}"
+                        context = "{'new_stage':'cancel'}"
+                        />
+                    <field name="stage" widget="statusbar" />
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" placeholder="Número de solicitud"  
+                        readonly="1"
+                        />
+                        </h1>
+                        <div invisible="context.get('default_category_id')">
+                            <label for="category_id" class="oe_edit_only" />
+                            <h3>
+                                <field name="category_id" placeholder="Tipo de solicitud"  
+                        />
+                            </h3>
+                        </div>
+                    </div>
+                    <group >
+                        <field name="requester_employee_id"/>
+                        <field name="accountable_employee_id" />
+                        <field name="description" required="1"/>
+                    </group>
+                    <group name="name" string="Activo a optimizar" attrs="{'invisible': [('category_id', '!=', %(activos_informatico.request_category_optimization)d)]}">
+                        <field name="job_positions_allow_ids" invisible="1" />
+                        <field name="fixed_asset_id" />
+                    </group>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Solicitud para asignacion -->
+    <record id="view_activos_informatico_request_assigment_form" model="ir.ui.view">
+        <field name="name">view.activos.informatico.request.form</field>
+        <field name="model">activos.informatico.request</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Solicitudes" >
+                <header>
+                    <button string="En proceso"
+                        class="btn btn-primary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('new' ))]}"
+                        context = "{'new_stage':'process'}"
+                        />
+                    <button string="Terminado"
+                        class="btn btn-primary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('process' ))]}"
+                        context = "{'new_stage':'done'}"
+                        />
+                    <button string="Cancelado"
+                        class="btn btn-secondary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('new','process'))]}"
+                        context = "{'new_stage':'cancel'}"
+                        />
+                    <field name="stage" widget="statusbar" />
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" placeholder="Número de solicitud"  readonly="1"/>
+                        </h1>
+                        <div invisible="context.get('default_category_id')">
+                            <label for="category_id" class="oe_edit_only" />
+                            <h3>
+                                <field name="category_id" placeholder="Tipo de solicitud"  />
+                            </h3>
+                        </div>
+                    </div>
+                    <group string="Datos de la solicitud"  >
+                        <field name="create_uid" string="Solicitante" readonly="1"  />
+                        <field name="description" string="Requisito de puesto de trabajo" required="1" attrs="{'readonly': [('stage', 'in', ('done','cancel') ) ]}"/>
+                        <field name="accountable_employee_id" attrs="{'invisible': [('stage', '=', 'new' ) ], 'readonly': [('stage', 'not in', ('process') ) ]}" 
+                        options="{'no_create': True, 'no_create_edit': True}"/>
+                    </group>
+                    <group name="Asignar puesto de trabajo" string="Asignamiento" attrs="{'invisible': [('stage', 'not in', ('process','done','cancel'))]}">
+                        <field name="requester_employee_id"  attrs="{'readonly': [('stage', 'in', ('done','cancel') ) ]}"
+                        options="{'no_create': True, 'no_create_edit': True}"
+                        />
+                        <field name="job_positions_allow_ids" invisible="1"  />
+                        <field name="fixed_asset_id" attrs="{'readonly': [('stage', 'not in', ('process') ) ]}" 
+                        options="{'no_create': True, 'no_create_edit': True}"
+                         />
+                    </group>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Solicitud para optimizacion -->
+    <record id="view_activos_informatico_request_optimization_form" model="ir.ui.view">
+        <field name="name">view.activos.informatico.optimization.form</field>
+        <field name="model">activos.informatico.request</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Solicitudes" >
+                <header>
+                    <button string="En proceso"
+                        class="btn btn-primary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('new' ))]}"
+                        context = "{'new_stage':'process'}"
+                        />
+                    <button string="Terminado"
+                        class="btn btn-primary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('process' ))]}"
+                        context = "{'new_stage':'done'}"
+                        />
+                    <button string="Cancelado"
+                        class="btn btn-secondary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('new','process'))]}"
+                        context = "{'new_stage':'cancel'}"
+                        />
+                    <field name="stage" widget="statusbar" />
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" placeholder="Número de solicitud"  readonly="1"/>
+                        </h1>
+                        <div invisible="context.get('default_category_id')">
+                            <label for="category_id" class="oe_edit_only" />
+                            <h3>
+                                <field name="category_id" placeholder="Tipo de solicitud"  />
+                            </h3>
+                        </div>
+                    </div>
+                    <group string="Datos de la solicitud"  >
+                        <field name="create_uid" string="Solicitante" readonly="1"  />
+                        <field name="description" string="¿Que caracteristicas desea mejorar? justifique" required="1" attrs="{'readonly': [('stage', 'in', ('done','cancel') ) ]}"/>
+                        <field name="accountable_employee_id" attrs="{'invisible': [('stage', '=', 'new' ) ], 'readonly': [('stage', 'not in', ('process') ) ]}" 
+                        options="{'no_create': True, 'no_create_edit': True}"/>
+                    </group>
+                    <group name="Puesto de trabajo para obtimizar" string="Puesto de trabajo para obtimizar" attrs="{'invisible': [('stage', 'not in', ('process','done','cancel'))]}">
+                        <field name="requester_employee_id" attrs="{'readonly': [('stage', 'in', ('done','cancel') ) ]}"
+                        options="{'no_create': True, 'no_create_edit': True}"
+                        />
+                        <field name="job_positions_allow_ids" invisible="1"  />
+                        <field name="fixed_asset_id" attrs="{'readonly': [('stage', 'not in', ('process') ) ]}" 
+                        options="{'no_create': True, 'no_create_edit': True}"
+                         />
+                    </group>
+                    <field name="job_positions_allow_ids_count" invisible="1" />
+                    <div class="alert alert-warning mb-0" role="alert" attrs="{'invisible': ['|',('stage', 'not in', ('process')),('job_positions_allow_ids_count', '!=', 0)]}" >
+                        Avertencia : No puede continuar porque el solicitante no tiene puestos de trabajo asignados
+                    </div>
+                    <notebook>
+                        <page name="request_category_optimization" string="Piezas para optimización" attrs="{'invisible': [('stage', 'not in', ('process','done','cancel'))]}">
+                            <field name="optimization_parts_ids" domain="[('category_id.parent_id','=',%(category_spare_parts)d),('stage','=','available'),('temp','=',0)]" 
+                                options="{'no_create': True, 'no_open': True}"
+                                attrs="{'readonly': [('stage', 'in', ('done','cancel') ) ]}"
+                             />
+                        </page>
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Solicitud para devolucion -->
+    <record id="view_activos_informatico_request_refund_form" model="ir.ui.view">
+        <field name="name">view.activos.informatico.refund.form</field>
+        <field name="model">activos.informatico.request</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Solicitudes" >
+                <header>
+                    <button string="En proceso"
+                        class="btn btn-primary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('new' ))]}"
+                        context = "{'new_stage':'process'}"
+                        />
+                    <button string="Terminado"
+                        class="btn btn-primary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('process' ))]}"
+                        context = "{'new_stage':'done'}"
+                        />
+                    <button string="Cancelado"
+                        class="btn btn-secondary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('new','process'))]}"
+                        context = "{'new_stage':'cancel'}"
+                        />
+                    <field name="stage" widget="statusbar" />
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" placeholder="Número de solicitud"  readonly="1"/>
+                        </h1>
+                        <div invisible="context.get('default_category_id')">
+                            <label for="category_id" class="oe_edit_only" />
+                            <h3>
+                                <field name="category_id" placeholder="Tipo de solicitud"  />
+                            </h3>
+                        </div>
+                    </div>
+                    <group string="Datos de la solicitud"  >
+                        <field name="create_uid" string="Solicitante" readonly="1"  />
+                        <field name="description" string="Motivo de devolución" required="1" attrs="{'readonly': [('stage', 'in', ('done','cancel') ) ]}"/>
+                        <field name="accountable_employee_id" attrs="{'invisible': [('stage', '=', 'new' ) ], 'readonly': [('stage', 'not in', ('process') ) ]}" 
+                        options="{'no_create': True, 'no_create_edit': True}"/>
+                    </group>
+                    <group name="Puesto de trabajo a devolver" string="Puesto de trabajo a devolver" attrs="{'invisible': [('stage', 'not in', ('process','done','cancel'))]}">
+                        <field name="requester_employee_id"  attrs="{'readonly': [('stage', 'in', ('done','cancel') ) ]}"
+                        options="{'no_create': True, 'no_create_edit': True}"
+                        />
+                        <field name="job_positions_allow_ids" invisible="1"  />
+                        <field name="fixed_asset_id" attrs="{'readonly': [('stage', 'not in', ('process') ) ]}" 
+                        options="{'no_create': True, 'no_create_edit': True}"
+                         />
+                    </group>
+                    <field name="job_positions_allow_ids_count" invisible="1" />
+                    <div class="alert alert-warning mb-0" role="alert" attrs="{'invisible': ['|',('stage', 'not in', ('process')),('job_positions_allow_ids_count', '!=', 0)]}" >
+                        Avertencia : No puede continuar porque el solicitante no tiene puestos de trabajo asignados
+                    </div>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Solicitud para bajas -->
+    <record id="view_activos_informatico_request_decompose_form" model="ir.ui.view">
+        <field name="name">view.activos.informatico.decompose.form</field>
+        <field name="model">activos.informatico.request</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Solicitudes" >
+                <header>
+                    <button string="En proceso"
+                        class="btn btn-primary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('new' ))]}"
+                        context = "{'new_stage':'process'}"
+                        />
+                    <button string="Terminado"
+                        class="btn btn-primary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('process' ))]}"
+                        context = "{'new_stage':'done'}"
+                        />
+                    <button string="Cancelado"
+                        class="btn btn-secondary"
+                        type="object"
+                        name="action_stage_change"
+                        attrs="{'invisible': [('stage', 'not in', ('new','process'))]}"
+                        context = "{'new_stage':'cancel'}"
+                        />
+                    <field name="stage" widget="statusbar" />
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" placeholder="Número de solicitud"  readonly="1"/>
+                        </h1>
+                        <div invisible="context.get('default_category_id')">
+                            <label for="category_id" class="oe_edit_only" />
+                            <h3>
+                                <field name="category_id" placeholder="Tipo de solicitud"  />
+                            </h3>
+                        </div>
+                    </div>
+                    <group string="Datos de la solicitud"  >
+                        <field name="create_uid" string="Solicitante" readonly="1"  />
+                        <field name="description" string="Motivo de la baja del puesto de trabajo" required="1" attrs="{'readonly': [('stage', 'in', ('done','cancel') ) ]}"/>
+                        <field name="accountable_employee_id" attrs="{'invisible': [('stage', '=', 'new' ) ], 'readonly': [('stage', 'not in', ('process') ) ]}" 
+                        options="{'no_create': True, 'no_create_edit': True}"/>
+                    </group>
+                    <group name="Puesto de trabajo obtener partes y piezas" string="Puesto de trabajo obtener partes y piezas" attrs="{'invisible': [('stage', 'not in', ('new','process','done','cancel'))]}">
+                        <field name="job_positions_allow_ids" invisible="1"  />
+                        <field name="fixed_asset_id" attrs="{'readonly': [('stage', 'not in', ('new','process') ) ]}" 
+                        options="{'no_create': True, 'no_create_edit': True}"
+                         />
+                    </group>
+                    <field name="job_positions_allow_ids_count" invisible="1" />
+                    <div class="alert alert-warning mb-0" role="alert" attrs="{'invisible': ['|',('stage', 'not in', ('process')),('job_positions_allow_ids_count', '!=', 0)]}" >
+                        Avertencia : No puede continuar porque el solicitante no tiene puestos de trabajo asignados
+                    </div>
+                    <notebook>
+                        <page name="request_category_despiece" string="Despiese de partes y piesas" attrs="{'invisible': [('stage', 'not in', ('process','done','cancel'))]}">
+                            <field name="optimization_parts_ids" domain="[('category_id.parent_id','=',%(category_spare_parts)d),('stage','=','available'),('temp','=',1)]" 
+                                context="{'default_parent_id':%(category_spare_parts)d, 'default_temp':1}"
+                                options="{'no_create': false, 'no_open': false}"
+                                attrs="{'readonly': [('stage', 'in', ('done','cancel') ) ]}">
+                                <tree string="activos_informatico_spare_parts_tree" >
+                                    <field name="name" />
+                                    <field name="code_fixed_asset" />
+                                    <field name="category_id" />
+                                    <field name="brand_id" />
+                                    <field name="model_id" />
+                                    <field name="serie" />
+                                    <field name="tag_ids" optional="hide" />
+                                    <field name="stage" />
+                                    <field name="warranty" optional="hide"/>
+                                    <field name="date_warranty"  optional="hide"/>
+                                </tree>
+                                <form string="Repuestos" >
+                                    <header>
+                                        <field name="stage" widget="statusbar" />
+                                    </header>
+                                    <sheet>
+                                        <div class="oe_button_box" name="button_box">
+                                            <button class="oe_stat_button" name="action_open_movements"
+                                    type="object" icon="fa-compress">
+                                                <div class="o_stat_info">
+                                                    <span class="o_stat_value">
+                                                        <field name="movement_count"/>
+                                                    </span>
+                                                    <span class="o_stat_text">
+                                        Kardex
+                                    </span>
+                                                </div>
+                                            </button>
+                                        </div>
+                                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                                        <field name="active" invisible="1"/>
+                                        <div class="oe_title">
+                                            <label for="name" class="oe_edit_only" />
+                                            <h1>
+                                                <field name="name" class="oe_inline" placeholder="Ingresa el código interno" readonly="1" />
+                                            </h1>
+                                            <label for="category_id" class="oe_edit_only" />
+                                            <h3>
+                                                <field name="category_id" class="oe_inline" placeholder="Categoría"  domain="[('parent_id','=',%(category_spare_parts)d)]" context="{'default_parent_id':%(category_spare_parts)d}"  
+                                                    required="1"/>
+                                            </h3>
+                                        </div>
+                                        <group >
+                                            <group string="Características generales">
+                                                <field name="code_fixed_asset" />
+                                                <field name="brand_id" />
+                                                <field name="model_id" context="{'default_brand_id':brand_id}" />
+                                                <field name="serie" />
+                                                <field name="tag_ids"  widget="many2many_tags"/>
+                                            </group>
+                                            <group string="Memoria"  attrs="{'invisible': [('category_id', '!=', %(activos_informatico.category_part_memory)d)]}">
+                                                <label for="ram" />
+                                                <div >
+                                                    <field name="ram" class="oe_inline" />
+                                                    <field name="ram_space" class="oe_inline" />
+                                                </div>
+                                            </group>
+                                            <group string="Disco" attrs="{'invisible': [('category_id', '!=', %(activos_informatico.category_part_disc)d)]}">
+                                                <label for="disco" />
+                                                <div >
+                                                    <field name="disco" class="oe_inline" />
+                                                    <field name="disco_space" class="oe_inline" />
+                                                    <field name="disco_type" class="oe_inline"  />
+                                                </div>
+                                            </group>
+                                            <group string="Garantía">
+                                                <field name="warranty" widget="boolean_toggle" />
+                                                <field name="date_warranty" />
+                                            </group>
+                                        </group>
+                                        <group >
+                                            <field name="note" />
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Search view for "activos.informatico.request.category" -->
+    <record id="view_activos_informatico_request_search" model="ir.ui.view">
+        <field name="name">view.activos.informatico.request.search</field>
+        <field name="model">activos.informatico.request</field>
+        <field name="arch" type="xml">
+            <search string="activos.informatico.request_search">
+                <field name="name" />
+                <field name="description" />
+                <field name="requester_employee_id" />
+                <field name="accountable_employee_id" />
+                <field name="stage" />
+                <separator/>
+                <filter name="archived" string="Archivados" domain="[('active', '=', False)]"/>
+                <separator/>
+                <group expand="1" string="Group By">
+                    <filter string="Solicitante" name="requester_employee_id" context="{'group_by':'requester_employee_id'}"/>
+                    <filter string="Responable" name="accountable_employee_id" context="{'group_by':'accountable_employee_id'}"/>
+                    <filter string="Estado" name="stage" context="{'group_by':'stage'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_activos_informatico_assigment_request" model="ir.actions.act_window">
+        <field name="name">Asignación</field>
+        <field name="res_model">activos.informatico.request</field>
+        <field name="search_view_id" ref="view_activos_informatico_request_search"/>
+        <field name="context" eval="{
+                'default_category_id': ref('activos_informatico.request_category_assigment'),
+            }"/>
+        <field name="domain" eval="[('category_id','=',ref('activos_informatico.request_category_assigment'))]"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_activos_informatico_request_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_activos_informatico_request_assigment_form')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Agregar una nueva solicitud asignación
+          </p>
+            <p>
+            Permite crear solicitud solicitudes asignación
+          </p>
+        </field>
+    </record>
+    <record id="action_activos_informatico_optimization_request" model="ir.actions.act_window">
+        <field name="name">Optimización</field>
+        <field name="res_model">activos.informatico.request</field>
+        <field name="search_view_id" ref="view_activos_informatico_request_search"/>
+        <field name="context" eval="{
+                'default_category_id': ref('activos_informatico.request_category_optimization'),
+            }"/>
+        <field name="domain" eval="[('category_id','=',ref('activos_informatico.request_category_optimization'))]"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_activos_informatico_request_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_activos_informatico_request_optimization_form')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Agregar una nueva solicitud optimización
+          </p>
+            <p>
+            Permite crear solicitud solicitud optimización
+          </p>
+        </field>
+    </record>
+    <record id="action_activos_informatico_refund_request" model="ir.actions.act_window">
+        <field name="name">Devoluciones</field>
+        <field name="res_model">activos.informatico.request</field>
+        <field name="search_view_id" ref="view_activos_informatico_request_search"/>
+        <field name="context" eval="{
+                'default_category_id': ref('activos_informatico.request_category_refund'),
+            }"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_activos_informatico_request_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_activos_informatico_request_refund_form')})]"/>
+        <field name="domain" eval="[('category_id','=',ref('activos_informatico.request_category_refund'))]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Agregar una nueva solicitud devolución
+          </p>
+            <p>
+            Permite crear solicitud solicitud devolución
+          </p>
+        </field>
+    </record>
+    <record id="action_activos_informatico_decompose_request" model="ir.actions.act_window">
+        <field name="name">Bajas de puestos de trabajos</field>
+        <field name="res_model">activos.informatico.request</field>
+        <field name="context" eval="{
+                'default_category_id': ref('activos_informatico.request_category_decompose'),
+            }"/>
+        <field name="search_view_id" ref="view_activos_informatico_request_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_activos_informatico_request_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_activos_informatico_request_decompose_form')})]"/>
+        <field name="domain" eval="[('category_id','=',ref('activos_informatico.request_category_decompose'))]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Agregar una nueva solicitud para dar de baja equipos
+          </p>
+            <p>
+            Permite crear solicitud solicitud para dat de baja equipos
+          </p>
+        </field>
+    </record>
+</odoo>

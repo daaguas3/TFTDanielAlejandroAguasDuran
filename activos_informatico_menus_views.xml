@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<!-- Top menu item -->
+	<!--
+	groups="account.group_account_readonly,account.group_account_invoice"
+	web_icon="account,static/description/icon.png"
+
+    menu principal
+        Solicitudes
+            -Mis solicitudes (pendientes) solicitante
+            -Mis requerimientos (pendientes) tecnico
+            -Todas hsitorico de todo el servicio
+        Activos
+            - Puestos trabajo
+            - Perifericos
+            - Respuestos
+        Informe
+            - De activos
+        Configuraciones
+            - Categorias de activos
+            - Categoria de solicitudes
+            - Modelos
+            - Marcas
+            - Sistemas operativos
+            - Procesadores
+    
+	-->
+	<menuitem 
+        name="Gestión de Activos Informáticos Telefonica EC " 
+        id="menu_activos_informatico" 
+        sequence="16"
+        groups="activos_informatico.group_user_fixed_asset"
+        />
+
+    <menuitem 
+        name="Gestión de Solicitudes" 
+        id="menu_request" 
+        parent="menu_activos_informatico"
+        sequence="1"/>
+
+    <menuitem 
+        name="Gestión de Activos Informáticos" 
+        id="menu_fixed_assset" 
+        parent="menu_activos_informatico"
+        sequence="2"/>
+    
+
+    
+    <menuitem 
+        name="Asignación" 
+        id="menu_request_assigment_my" 
+        parent="menu_request"
+        action="action_activos_informatico_assigment_request" 
+        sequence="1"/>
+    
+    <menuitem 
+        name="Optimización" 
+        id="menu_request_optimization_my" 
+        parent="menu_request"
+        action="action_activos_informatico_optimization_request" 
+        sequence="2"/>
+    
+     <menuitem 
+        name="Devolución" 
+        id="menu_request_refund_my" 
+        parent="menu_request"
+        action="action_activos_informatico_refund_request" 
+        sequence="3"/>
+    
+    <menuitem 
+        name="Baja / Reciclaje de equipo obsolescentes" 
+        id="menu_request_decompose_my" 
+        parent="menu_request"
+        action="action_activos_informatico_decompose_request" 
+        sequence="4"/>
+
+
+    <menuitem 
+        name="Puestos de Trabajo" 
+        id="menu_fixed_asset" 
+        action="action_activos_informatico_fixed_asset" 
+        parent="menu_fixed_assset"
+        sequence="1"/>
+
+    <menuitem 
+        name="Periféricos" 
+        id="menu_peripherals" 
+        action="action_activos_informatico_peripherals" 
+        parent="menu_fixed_assset"
+        sequence="2"/>
+
+
+    <menuitem 
+        name="Repuestos" 
+        id="menu_spare_parts" 
+        action="action_activos_informatico_spare_parts" 
+        parent="menu_fixed_assset"
+        sequence="3"/>
+
+
+    <menuitem 
+        name="Gestión de Informes" 
+        id="menu_report" 
+        parent="menu_activos_informatico"
+        sequence="16"
+        groups="activos_informatico.group_boss_support"
+    />
+    <menuitem 
+        name="KPI de solicitudes" 
+        id="menu_report_request" 
+        parent="menu_report"
+        sequence="1"
+        action="action_activos_informatico_report_request" 
+    />
+
+    <menuitem 
+        name="Gestión de Configuración" 
+        id="menu_setting" 
+        parent="menu_activos_informatico"
+        sequence="99"
+         groups="activos_informatico.group_boss_support"
+        />
+			
+	
+	
+    <menuitem 
+        name="Activos Informáticos" 
+        id="menu_categoria" 
+        action="action_activos_informatico_category" 
+        parent="menu_setting"
+        sequence="16"/>
+
+    <menuitem 
+        name="Solicitudes" 
+        id="menu_category_request" 
+        action="action_activos_informatico_request_category" 
+        parent="menu_setting"
+        sequence="17"/>
+
+    <menuitem 
+        name="Modelos" 
+        id="menu_brand" 
+        action="action_activos_informatico_model" 
+        parent="menu_setting"
+        sequence="18"/>
+
+    <menuitem 
+        name="Marcas" 
+        id="menu_model" 
+        action="action_activos_informatico_brand" 
+        parent="menu_setting"
+        sequence="19"/>
+	
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+     <!-- VIEWS: "Modelos    "
+    
+        - Model·········: activos.informatico.model
+        - _rec_name·····: name
+        - Domain········: []
+        - Context·······: \{}
+        - Parent menu ··: base.menu_custom
+        - View priority·: 16    
+        - Sequence····..: 10
+        - Action help···: Registre su primera marca
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    
+    <!-- Tree view for "activos.informatico.model" -->
+    <record id="view_activos_informatico_model_tree" model="ir.ui.view">
+        <field name="name">view.activos.informatico.model.tree</field>
+        <field name="model">activos.informatico.model</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="activos.informatico.model_tree" editable="bottom">
+                <field name="name" />
+                <field name="brand_id" />
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Search view for "activos.informatico.model" -->
+    <record id="view_activos_informatico_model_search" model="ir.ui.view">
+        <field name="name">view.activos.informatico.model.search</field>
+        <field name="model">activos.informatico.model</field>
+        <field name="arch" type="xml">
+            <search string="activos.informatico.model_search">
+                <field name="name" />
+                <field name="brand_id" />
+            </search>
+        </field>
+    </record>
+    
+  
+    <record id="action_activos_informatico_model" model="ir.actions.act_window">
+        <field name="name">Modelo</field>
+        <field name="res_model">activos.informatico.model</field>
+        <field name="view_id" ref="view_activos_informatico_model_search"/>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+                Agregar un modelo nuevo
+          </p><p>
+            Permite identificar clasificar por modelos
+          </p>
+        </field>
+    </record>
+</odoo>

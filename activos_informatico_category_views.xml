@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    
+    <!-- VIEWS: "Categorías Activos informatico"
+    
+        - Model·········: activos.informatico.category
+        - _rec_name·····: name
+        - Domain········: []
+        - Context·······: \{}
+        - Parent menu ··: base.menu_custom
+        - View priority·: 16    
+        - Sequence····..: 10
+        - Action help···: Registre su primera categoria
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    
+    <!-- Tree view for "activos.informatico.category" -->
+    <record id="view_activos_informatico_category_tree" model="ir.ui.view">
+        <field name="name">view.activos.informatico.category.tree</field>
+        <field name="model">activos.informatico.category</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="activos.informatico.category_tree" editable="bottom">
+                <field name="name" />
+                <field name="parent_id" />
+                <field name="sequence_id" />
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Search view for "activos.informatico.category" -->
+    <record id="view_activos_informatico_category_search" model="ir.ui.view">
+        <field name="name">view.activos.informatico.category.search</field>
+        <field name="model">activos.informatico.category</field>
+        <field name="arch" type="xml">
+            <search string="activos.informatico.category_search">
+                <field name="name" />
+            </search>
+        </field>
+    </record>
+    
+    <record id="action_activos_informatico_category" model="ir.actions.act_window">
+        <field name="name">Categorias</field>
+        <field name="res_model">activos.informatico.category</field>
+        <field name="view_id" ref="view_activos_informatico_category_search"/>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+                Agregar un categoria nueva
+          </p><p>
+            Permite identificar los activos informaticos
+          </p>
+        </field>
+    </record>
+    
+</odoo>

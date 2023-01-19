@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- VIEWS: "Activos Fijos"
+    
+        - Model·········: activos.informatico.fixed.asset
+        - _rec_name·····: name
+        - Domain········: []
+        - Context·······: \{}
+        - Parent menu ··: base.menu_custom
+        - View priority·: 16    
+        - Sequence····..: 10
+        - Action help···: Registra los activos fijos
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Tree view for "activos.informatico.fixed.asset" -->
+    <record id="view_activos_informatico_fixed_asset_tree" model="ir.ui.view">
+        <field name="name">view.activos.informatico.fixed.asset.tree</field>
+        <field name="model">activos.informatico.fixed.asset</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="activos_informatico_fixed_asset_tree" >
+                <field name="name" />
+                <field name="code_fixed_asset" />
+                <field name="current_employee_id" />
+                <field name="category_id" />
+                <field name="brand_id" />
+                <field name="model_id" />
+                <field name="serie" />
+                <field name="processor_id" optional="hide"/>
+                <field name="ram" optional="hide"/>
+                <field name="ram_space" optional="hide"/>
+                <field name="disco" optional="hide"/>
+                <field name="disco_space" optional="hide"/>
+                <field name="disco_type" optional="hide"/>
+                <field name="hostname" optional="hide"/>
+                <field name="so_id" optional="hide"/>
+                <field name="domain" optional="hide"/>
+                <field name="tag_ids" optional="hide" />
+                <field name="stage" />
+                <field name="warranty" optional="hide"/>
+                <field name="date_warranty"  optional="hide"/>
+            </tree>
+        </field>
+    </record>
+    <!-- Form view for "activos.informatico.fixed.asset" -->
+    <record id="view_activos_informatico_fixed_asset_form" model="ir.ui.view">
+        <field name="name">view.activos.informatico.fixed.asset.form</field>
+        <field name="model">activos.informatico.fixed.asset</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="activos_informatico_fixed_asset_form" >
+                <header>
+                    <field name="stage" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_open_movements"
+                                    type="object" icon="fa-compress">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="movement_count"/>
+                                    </span>
+                                    <span class="o_stat_text">
+                                        Kardex
+                                    </span>
+                                </div>
+                            </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" class="oe_inline"
+                                placeholder="Ingresa el código interno" readonly="1"/>
+                        </h1>
+                        <label for="category_id" class="oe_edit_only" />
+                        <h3>
+                            <field name="category_id" class="oe_inline" placeholder="Categoría" 
+                            domain="[('parent_id','=',%(category_job_positions)d)]" 
+                            context="{'default_parent_id':%(category_job_positions)d}"  
+                            required="1"
+                            />
+                        </h3>
+                        <label for="current_employee_id" class="oe_edit_only" />
+                        <h4>
+                            <field name="current_employee_id" class="oe_inline" placeholder="Custorio" />
+                        </h4>
+                    </div>
+                    <group >
+                        <group string="Características generales">
+                            <field name="code_fixed_asset" />
+                            <field name="brand_id" />
+                            <field name="model_id" context="{'default_brand_id':brand_id}" />
+                            <field name="serie" />
+                            <field name="processor_id" />
+                            <label for="ram" />
+                            <div >
+                                <field name="ram" class="oe_inline" />
+                                <field name="ram_space" class="oe_inline" />
+                            </div>
+                            <label for="disco" />
+                            <div >
+                                <field name="disco" class="oe_inline" />
+                                <field name="disco_space" class="oe_inline" />
+                                <field name="disco_type" class="oe_inline"  />
+                            </div>
+                        </group>
+                        <group string="Descripción">
+                            <field name="hostname" />
+                            <field name="so_id" />
+                            <field name="domain" />
+                            <field name="tag_ids"  widget="many2many_tags"/>
+                        </group>
+                        <group string="Garantía">
+                            <field name="warranty" widget="boolean_toggle" />
+                            <field name="date_warranty" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Nota" string="Nota">
+                            <field name="note" />
+                        </page>
+                        <page name="peripherals" string="Perifericos">
+                            <field name="peripherals_available_ids" invisible="1"/>
+                            <field name="peripherals_ids" widget="many2many">
+                                <tree string="activos_informatico_peripherals_tree" >
+                                    <field name="name" />
+                                    <field name="code_fixed_asset" />
+                                    <field name="category_id" />
+                                    <field name="brand_id" />
+                                    <field name="model_id" />
+                                    <field name="serie" />
+                                    <field name="tag_ids" optional="hide" />
+                                    <field name="stage" />
+                                    <field name="warranty" optional="hide"/>
+                                    <field name="date_warranty"  optional="hide"/>
+                                </tree>
+                                <form string="Periferico">
+                                    <header>
+                                        <field name="stage" widget="statusbar" />
+                                    </header>
+                                    <sheet>
+                                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                                        <field name="active" invisible="1"/>
+                                        <div class="oe_title">
+                                            <label for="name" class="oe_edit_only" />
+                                            <h1>
+                                                <field name="name" class="oe_inline"
+                                        placeholder="Ingresa el código interno" />
+                                            </h1>
+                                            <label for="category_id" class="oe_edit_only" />
+                                            <h3>
+                                                <field name="category_id" class="oe_inline" placeholder="Categoría" 
+                                    domain="[('parent_id','=',%(category_peripherals)d)]" 
+                                    context="{'default_parent_id':%(category_peripherals)d}"  
+                                    required="1"
+                                    />
+                                            </h3>
+                                        </div>
+                                        <group >
+                                            <group string="Características">
+                                                <field name="code_fixed_asset" />
+                                                <field name="brand_id" />
+                                                <field name="model_id" context="{'default_brand_id':brand_id}" />
+                                                <field name="serie" />
+                                                <field name="tag_ids"  widget="many2many_tags"/>
+                                            </group>
+                                            <group string="Garantía">
+                                                <field name="warranty" widget="boolean_toggle" />
+                                                <field name="date_warranty" />
+                                            </group>
+                                        </group>
+                                        <group>
+                                            <field name="note" />
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Search view for "activos.informatico.fixed.asset" -->
+    <record id="view_activos_informatico_fixed_asset_search" model="ir.ui.view">
+        <field name="name">view.activos.informatico.fixed.asset.search</field>
+        <field name="model">activos.informatico.fixed.asset</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="activos_informatico_fixed_asset_search">
+                <field name="name" />
+                <field name="code_fixed_asset" />
+                <field name="serie" />
+                <field name="current_employee_id" />
+                <field name="category_id" />
+                <field name="model_id" />
+                <field name="brand_id" />
+                <field name="processor_id" />
+                <field name="so_id" />
+                <field name="hostname" />
+                <field name="stage" />
+                <separator/>
+                <filter name="availables" string="Disponibles" domain="[('stage', '=', 'available')]"/>
+                <filter name="assigned" string="Asignados" domain="[('stage', '=', 'assigned')]"/>
+                <filter name="repair" string="Reparación" domain="[('stage', '=', 'repair')]"/>
+                <separator/>
+                <filter name="warranty" string="Fuera garantia" domain="[('warranty', '=', False)]"/>
+                <filter name="unwarranty" string="En  garantia" domain="[('warranty', '=', True)]"/>
+                <separator/>
+                <filter name="archived" string="Archivados" domain="[('active', '=', False)]"/>
+                <separator/>
+                <group expand="1" string="Group By">
+                    <filter string="Custorio" name="current_employee_id" context="{'group_by':'current_employee_id'}"/>
+                    <filter string="Categoría" name="category_id" context="{'group_by':'category_id'}"/>
+                    <filter string="Estados" name="stage" context="{'group_by':'stage'}"/>
+                    <filter string="Marca" name="brand_id" context="{'group_by':'brand_id'}"/>
+                    <filter string="Modelo" name="model_id" context="{'group_by':'model_id'}"/>
+                    <filter string="Sistemas Operativos" name="so_id" context="{'group_by':'so_id'}"/>
+                    <filter string="Procesadores" name="processor_id" context="{'group_by':'processor_id'}"/>
+                    <filter string="Etiquetas" name="tag_ids" context="{'group_by':'tag_ids'}"/>
+                    <filter string="Vencimiento Garántia" name="date_warranty" context="{'group_by':'date_warranty'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <!-- Main window action for "activos.informatico.fixed.asset" -->
+    <record id="action_activos_informatico_fixed_asset" model="ir.actions.act_window">
+        <field name="name">Puesto de trabajo</field>
+        <field name="res_model">activos.informatico.fixed.asset</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+        <field name="domain">[('is_job_position','=',True),('temp','=',0)]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="view_activos_informatico_fixed_asset_search" />
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Registra tu primer puesto de trabajo
+            </p>
+            <p>
+                Los puestos de trabajos son laptops y equipos con sus perifericos
+            </p>
+        </field>
+    </record>
+    <record id="view_activos_informatico_peripherals_tree" model="ir.ui.view">
+        <field name="name">view.activos.informatico.peripherals.tree</field>
+        <field name="model">activos.informatico.fixed.asset</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="activos_informatico_peripherals_tree" >
+                <field name="name" />
+                <field name="code_fixed_asset" />
+                <field name="category_id" />
+                <field name="brand_id" />
+                <field name="model_id" />
+                <field name="composed_in_id" />
+                <field name="serie" />
+                <field name="tag_ids" optional="hide" />
+                <field name="stage" />
+                <field name="warranty" optional="hide"/>
+                <field name="date_warranty"  optional="hide"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_activos_informatico_peripherals_form" model="ir.ui.view">
+        <field name="name">view.activos.informatico.peripherals.form</field>
+        <field name="model">activos.informatico.fixed.asset</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="perifericos" >
+                <header>
+                    <field name="stage" widget="statusbar" />
+                </header>
+                <sheet>
+                      <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_open_movements"
+                                    type="object" icon="fa-compress">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="movement_count"/>
+                                    </span>
+                                    <span class="o_stat_text">
+                                        Kardex
+                                    </span>
+                                </div>
+                            </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" class="oe_inline"
+                                placeholder="Ingresa el código interno" readonly="1" />
+                        </h1>
+                        <label for="category_id" class="oe_edit_only" />
+                        <h3>
+                            <field name="category_id" class="oe_inline" placeholder="Categoría" 
+                            domain="[('parent_id','=',%(category_peripherals)d)]" 
+                            context="{'default_parent_id':%(category_peripherals)d}"  
+                            required="1"
+                            />
+                        </h3>
+                    </div>
+                    <group >
+                        <group string="Características ">
+                            <field name="composed_in_id" domain="[('category_id.parent_id','=',%(category_job_positions)d)]" 
+                                options="{'no_create': True, 'no_create_edit': True}"
+                            />
+                            <field name="code_fixed_asset" />
+                            <field name="brand_id" />
+                            <field name="model_id" context="{'default_brand_id':brand_id}"/>
+                            <field name="serie" />
+                            <field name="tag_ids"  widget="many2many_tags"/>
+                        </group>
+                        <group string="Garantía">
+                            <field name="warranty" widget="boolean_toggle" />
+                            <field name="date_warranty" />
+                        </group>
+                    </group>
+                    <group >
+                        <field name="note" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_activos_informatico_peripherals_search" model="ir.ui.view">
+        <field name="name">view.activos.informatico.peripherals.search</field>
+        <field name="model">activos.informatico.fixed.asset</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="activos_informatico_peripherals_search">
+                <field name="name" />
+                <field name="serie" />
+                <field name="category_id" />
+                <field name="model_id" />
+                <field name="brand_id" />
+                <field name="composed_in_id" />
+                <field name="stage" />
+                <separator/>
+                <filter name="availables" string="Disponibles" domain="[('stage', '=', 'available')]"/>
+                <filter name="assigned" string="Asignados" domain="[('stage', '=', 'assigned')]"/>
+                <filter name="repair" string="Reparación" domain="[('stage', '=', 'repair')]"/>
+                <separator/>
+                <filter name="noasigned" string="Sin puesto de trabajo" domain="[('composed_in_id', '=', False)]"/>
+                <separator/>
+                <filter name="warranty" string="Fuera garantia" domain="[('warranty', '=', False)]"/>
+                <filter name="unwarranty" string="En  garantia" domain="[('warranty', '=', True)]"/>
+                <separator/>
+                <filter name="archived" string="Archivados" domain="[('active', '=', False)]"/>
+                <separator/>
+                <group expand="1" string="Group By">
+                    <filter string="Categoría" name="category_id" context="{'group_by':'category_id'}"/>
+                    <filter string="Estados" name="stage" context="{'group_by':'stage'}"/>
+                    <filter string="Marca" name="brand_id" context="{'group_by':'brand_id'}"/>
+                    <filter string="Modelo" name="model_id" context="{'group_by':'model_id'}"/>
+                    <filter string="Puesto de trabajo" name="composed_in_id_group" context="{'group_by':'composed_in_id'}"/>
+                    <filter string="Etiquetas" name="tag_ids" context="{'group_by':'tag_ids'}"/>
+                    <filter string="Vencimiento Garántia" name="date_warranty" context="{'group_by':'date_warranty'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_activos_informatico_peripherals" model="ir.actions.act_window">
+        <field name="name">Perifericos</field>
+        <field name="res_model">activos.informatico.fixed.asset</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+        <field name="domain" eval="[('category_id.parent_id','=',ref('category_peripherals')),('temp','=',0)]"></field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_activos_informatico_peripherals_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_activos_informatico_peripherals_form')})]"/>
+        <field name="context">{'search_default_composed_in_id_group':1}</field>
+        <field name="search_view_id" ref="view_activos_informatico_peripherals_search" />
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Registra tu primer perifericos
+            </p>
+            <p>
+                Los periféricos formaran parte de un puesto de trabajo
+            </p>
+        </field>
+    </record>
+
+    <record id="view_activos_informatico_spare_parts_tree" model="ir.ui.view">
+        <field name="name">view.activos.informatico.spare.parts.tree</field>
+        <field name="model">activos.informatico.fixed.asset</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="activos_informatico_spare_parts_tree" >
+                <field name="name" />
+                <field name="code_fixed_asset" />
+                <field name="category_id" />
+                <field name="brand_id" />
+                <field name="model_id" />
+                <field name="serie" />
+                <field name="tag_ids" optional="hide" />
+                <field name="stage" />
+                <field name="warranty" optional="hide"/>
+                <field name="date_warranty"  optional="hide"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_activos_informatico_spare_parts_form" model="ir.ui.view">
+        <field name="name">view.activos.informatico.spare.parts.form</field>
+        <field name="model">activos.informatico.fixed.asset</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Repuestos" >
+                <header>
+                    <field name="stage" widget="statusbar" />
+                </header>
+                <sheet>
+                      <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_open_movements"
+                                    type="object" icon="fa-compress">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="movement_count"/>
+                                    </span>
+                                    <span class="o_stat_text">
+                                        Kardex
+                                    </span>
+                                </div>
+                            </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" class="oe_inline"
+                                placeholder="Ingresa el código interno" readonly="1" />
+                        </h1>
+                        <label for="category_id" class="oe_edit_only" />
+                        <h3>
+                            <field name="category_id" class="oe_inline" placeholder="Categoría" 
+                            domain="[('parent_id','=',%(category_spare_parts)d)]" 
+                            context="{'default_parent_id':%(category_spare_parts)d}"  
+                            required="1"
+                            />
+                        </h3>
+                    </div>
+                    <group >
+                        <group string="Características generales">
+                            <field name="code_fixed_asset" />
+                            <field name="brand_id" />
+                            <field name="model_id" context="{'default_brand_id':brand_id}" />
+                            <field name="serie" />
+                            <field name="tag_ids"  widget="many2many_tags"/>
+                        </group>
+                        <group string="Memoria"  attrs="{'invisible': [('category_id', '!=', %(activos_informatico.category_part_memory)d)]}">
+                        
+                            <label for="ram" />
+                            <div >
+                                <field name="ram" class="oe_inline" />
+                                <field name="ram_space" class="oe_inline" />
+                            </div>
+                        </group>
+                        <group string="Disco" attrs="{'invisible': [('category_id', '!=', %(activos_informatico.category_part_disc)d)]}"> 
+                            <label for="disco" />
+                            <div >
+                                <field name="disco" class="oe_inline" />
+                                <field name="disco_space" class="oe_inline" />
+                                <field name="disco_type" class="oe_inline"  />
+                            </div>
+                        </group>
+                        <group string="Garantía">
+                            <field name="warranty" widget="boolean_toggle" />
+                            <field name="date_warranty" />
+                        </group>
+                    </group>
+                    <group >
+                        <field name="note" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_activos_informatico_spare_parts_search" model="ir.ui.view">
+        <field name="name">view.activos.informatico.spare.parts.search</field>
+        <field name="model">activos.informatico.fixed.asset</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="activos_informatico_spare_parts_search">
+                <field name="name" />
+                <field name="code_fixed_asset" />
+                <field name="serie" />
+                <field name="category_id" />
+                <field name="model_id" />
+                <field name="brand_id" />
+                <field name="stage" />
+                <separator/>
+                <filter name="availables" string="Disponibles" domain="[('stage', '=', 'available')]"/>
+                <separator/>
+                <filter name="warranty" string="Fuera garantia" domain="[('warranty', '=', False)]"/>
+                <filter name="unwarranty" string="En  garantia" domain="[('warranty', '=', True)]"/>
+                <separator/>
+                <filter name="archived" string="Archivados" domain="[('active', '=', False)]"/>
+                <separator/>
+                <group expand="1" string="Group By">
+                    <filter string="Categoría" name="category_id" context="{'group_by':'category_id'}"/>
+                    <filter string="Estados" name="stage" context="{'group_by':'stage'}"/>
+                    <filter string="Marca" name="brand_id" context="{'group_by':'brand_id'}"/>
+                    <filter string="Modelo" name="model_id" context="{'group_by':'model_id'}"/>
+                    <filter string="Etiquetas" name="tag_ids" context="{'group_by':'tag_ids'}"/>
+                    <filter string="Vencimiento Garántia" name="date_warranty" context="{'group_by':'date_warranty'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_activos_informatico_spare_parts" model="ir.actions.act_window">
+        <field name="name">Repuestos</field>
+        <field name="res_model">activos.informatico.fixed.asset</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+        <field name="domain" eval="[('category_id.parent_id','=',ref('category_spare_parts')),('temp','=',0)]"></field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_activos_informatico_spare_parts_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_activos_informatico_spare_parts_form')})]"/>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="view_activos_informatico_spare_parts_search" />
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Registra tu primer repuesto
+            </p>
+            <p>
+                Los repuestos son piesas disponibles para mejorar los puestos de trabajo
+            </p>
+        </field>
+    </record>
+</odoo>

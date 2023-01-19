@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+     <!-- VIEWS: "Marcas "
+    
+        - Model·········: activos.informatico.brand
+        - _rec_name·····: name
+        - Domain········: []
+        - Context·······: \{}
+        - Parent menu ··: base.menu_custom
+        - View priority·: 16    
+        - Sequence····..: 10
+        - Action help···: Registre su primera marca
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    
+    <!-- Tree view for "activos.informatico.brand" -->
+    <record id="view_activos_informatico_brand_tree" model="ir.ui.view">
+        <field name="name">view.activos.informatico.brand.tree</field>
+        <field name="model">activos.informatico.brand</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="activos.informatico.brand_tree" >
+                <field name="name" />
+                <field name="category_ids" widget="many2many_tags"/>
+                <field name="model_ids" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+
+    
+    <record id="view_activos_informatico_brand_form" model="ir.ui.view">
+        <field name="name">view.activos.informatico.brand.form</field>
+        <field name="model">activos.informatico.brand</field>
+        <field name="type">form</field>
+        
+        <field name="arch" type="xml">
+            <form string="Caption" create="true" delete="true" edit="true">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1><field name="name" placeholder="Describe la marca" /></h1>
+                    </div>        
+
+                    <group >
+                            <field name="category_ids" widget="many2many_tags"/>
+                            <field name="model_ids" widget="many2many_tags" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    
+    <!-- Search view for "activos.informatico.brand" -->
+    <record id="view_activos_informatico_brand_search" model="ir.ui.view">
+        <field name="name">view.activos.informatico.brand.search</field>
+        <field name="model">activos.informatico.brand</field>
+        <field name="arch" type="xml">
+            <search string="activos.informatico.brand_search">
+                <field name="name" />
+                <field name="category_ids" />
+                <field name="model_ids" />
+            </search>
+        </field>
+    </record>
+    
+  
+    <record id="action_activos_informatico_brand" model="ir.actions.act_window">
+        <field name="name">Marca</field>
+        <field name="res_model">activos.informatico.brand</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_activos_informatico_brand_search"/>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+                Agregar un nuevo marca
+          </p><p>
+            Permite identificar clasificar por marca los activos fijos
+          </p>
+        </field>
+    </record>
+</odoo>

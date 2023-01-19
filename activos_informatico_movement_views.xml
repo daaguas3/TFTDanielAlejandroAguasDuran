@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <record id="view_activos_informatico_movement_tree" model="ir.ui.view">
+        <field name="name">view.activos.informatico.movement.tree</field>
+        <field name="model">activos.informatico.movement</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            
+            <tree string="Movimientos" create="false" delete="false" >
+                
+                <field name="type" />
+                <field name="name" />
+                <field name="request_id" />
+                <field name="create_date" />
+                <field name="current_employee_id" />
+                <field name="fixed_asset_id" />
+                <field name="category_fixed_asset_id" />
+                <field name="apply_fixed_asset_id" />
+                
+            </tree>
+        
+        </field>
+    </record>
+    
+</odoo>
